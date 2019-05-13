@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My Weed</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width"/>
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <style type="text/css">
+    html {
+      background-size: cover;
+      background-attachment:fixed;
+      line-height: 1.5rem;
+      color: rgba(0,0,0,.92);
+      font-family: Montserrat,sans-serif;
+      display: inline-block;
+      margin: 0px auto;
+      text-align: center;
+    }
+    body {margin: 0}
+    menu {padding: 0;}
+    menu li {
+      cursor: pointer;
+      list-style: none;
+      display: inline-block;
+      padding: 8px;
+      background-color: #dddddd;
+    }
+    .page {background-color: #fff; width: 380px; margin: auto; padding: 20px; display: none;}
+    h1, menu {padding: 20px;}
+    menu {line-height: 30px;}
+    h1 {padding: 20px; font-family: "Canna"; font-size: 48px;}
+    input {margin-bottom: 30px; width: 200px; line-height: 30px;}
+    input[type=checkbox] {width: 20px; margin-bottom: 3px}
+    input[type=date] {display:block; margin:auto; margin-bottom: 20px;}
+    h1, h2, h3 {margin-bottom: 30px; color: #444;}
+    .plant-data {width: 300px; height: 300px; background-color: #ddd; display: inline-block; margin-bottom: 20px;}
+    input[type=submit] {background-color: #fff; border: 1px solid #00A8A9; line-height: 40px; margin-bottom: 3px; display: block; margin: auto;}
+    input:hover[type=submit] { color: #fff; background-color: #00A8A9;}
+    button {background-color: #fff; border: 1px solid red; line-height: 40px; margin-bottom: 3px; display: block; margin: auto; margin-bottom: 20px;}
+    button:hover { color: #fff; background-color: red;}
+    input[type="submit"]::-moz-focus-inner, input[type="button"]::-moz-focus-inner, button::-moz-focus-inner {border : 0px;}
+    .modif-popup {display: none; position: fixed; left: 50%; margin-left: -250px; background-color: #17c632; color: #fff; width: 500px; line-height: 50px; border-radius: 5px; font-weight: bold;}
+    .subpage {display: none;}
+    h3 {text-align: left; background-color: #fff; color: #00A8A9; margin-bottom: 20px; line-height: 60px; border-bottom: 1px solid #00A8A9; cursor: pointer;}
+    h4 {text-align: left; line-height: 30px; padding-left: 50px;}
+    #pages {margin-bottom: 50px;}
+    .form-name1, .form-name2, .form-name3 {font-weight: bold;}
+    table {width: 100%; text-align: left; font-size: 16px; margin-bottom: 30px;}
+    tr, th {width: 50%; height: 30px;}
+    caption {height: 50px; font-weight: bold; font-size: 20px;line-height: 50px; padding-bottom: 20px;}
+    #water-empty {background-color: #cf5856; color: #fff; padding: 10px;border-radius: 5px; margin-bottom: 30px; display: none;}
+    img {width: 50px; height: 50px; float: left;}
+  </style>
+</head>
+  <body>
+    <div class="modif-popup" id="modif-popup-names">Les noms ont bien été changés</div>
+    <div class="modif-popup" id="modif-popup-dates">Les dates ont bien été changées</div>
+    <div class="modif-popup" id="modif-popup-hum">Le taux d'humidité requise a bien été changé</div>
+    <div class="modif-popup" id="modif-popup-hum-enable">L'humidificateur a été activé</div>
+    <div class="modif-popup" id="modif-popup-hum-disable">L'humidificateur a été desactivé</div>
+    <div class="modif-popup" id="modif-popup-hygro-enable">Le capteur d'humidité de <span class="hygro-popup-name"></span> a été activé</div>
+    <div class="modif-popup" id="modif-popup-hygro-disable">Le capteur d'humidité de <span class="hygro-popup-name"></span> a été desactivé</div>
+
+    <h1>My Weed</h1>
+    <menu>
+      <li>Informations</li>
+      <li>Configuration</li>
+    </menu>
+    <div id="pages">
+    <div class="page">
+      <table>
+        <caption rowspan="2"><img src="temp.png" alt="temp">Atmosphère de culture</caption>
+        <tr>
+          <th>Température:</th>
+          <td><span id="temp">En chargement...</span></td>
+        </tr>
+        <tr>
+          <th>Humidité:</th>
+          <td><span id="hum">En chargement...</span></td>
+        </tr>
+      </table>
+      <p id="water-empty">
+        <i class="material-icons">warning</i>
+        Il est temps de remettre de l'eau dans le bac!
+      <p>
+  <div class="plant-data">
+    <p class="form-name1"></p>
+    <div class="croissance">
+      <div id="div-cro1">
+      <p>En croissance depuis le <span id="date-cro1"></span>:</p>
+      <p class="cro1"></p>
+    </div>
+    <div id="div-flo1">
+      <p>En floraison depuis le <span id="date-flo1"></span>:</p>
+      <p class="flo1"></p>
+    </div>
+      <div class="linked-hygro1">
+        <p>Hygrométrie:</p>
+        <p class="hygro-plante1"></p>
+      </div>
+    </div>
+  </div>
+  <div class="plant-data">
+    <p class="form-name2"></p>
+    <div class="croissance">
+      <div id="div-cro2">
+      <p>En croissance depuis le <span id="date-cro2"></span>:</p>
+      <p class="cro2"></p>
+    </div>
+    <div id="div-flo2">
+      <p>En floraison depuis le <span id="date-flo2"></span>:</p>
+      <p class="flo2"></p>
+    </div>
+      <div class="linked-hygro2">
+        <p>Hygrométrie:</p>
+        <p class="hygro-plante2"></p>
+      </div>
+    </div>
+  </div>
+  <div class="plant-data">
+    <p class="form-name3"></p>
+    <div class="croissance">
+      <div id="div-cro3">
+      <p>En croissance depuis le <span id="date-cro3"></span>:</p>
+      <p class="cro3"></p>
+    </div>
+    <div id="div-flo3">
+      <p>En floraison depuis le <span id="date-flo3"></span>:</p>
+      <p class="flo3"></p>
+    </div>
+      <div class="linked-hygro3">
+        <p>Hygrométrie:</p>
+        <p class="hygro-plante3"></p>
+      </div>
+    </div>
+  </div>
+    </div>
+    <div class="page">
+            <h3>Changer les Noms</h3>
+      <div class="subpage">
+<form id="names" action="" method="post">
+      <div class="form-name1"></div>
+      <input type="text" name="plante1">
+      <div class="form-name2"></div>
+      <input type="text" name="plante2">
+      <div class="form-name3"></div>
+      <input type="text" name="plante3">
+      <input type="submit" name="plantes-submit" value="valider"></input>
+</form>
+</div>
+      <h3>Taux d'humidité</h3>
+<div class="subpage">
+  <p><input type="checkbox" value="" name="hum-active" id="hum-active" checked>
+  <label for="hygro">Humidificateur d'air activé</label>
+</p>
+        <input display="inline" type="text" class="dial" value="75" id="hum-input" data-displayPrevious=true data-fgColor="#00A8A9" data-thickness=.3 value="29">
+      </div>
+      <h3>Taux d'hygrométrie du sol</h3>
+
+      <div class="subpage">
+        <input display="inline" type="text" class="dial" value="75" id="hygro-input" data-displayPrevious=true data-fgColor="#00A8A9" data-thickness=.3 value="29">
+        <p><input type="checkbox" value="" name="hygro1-active" class="check-hygro" id="check-hygro1" checked>
+        <label for="hygro"><span class="form-name1"></span> Presence de capteur d'hygrométrie</label></p>
+        <p><input type="checkbox" value="" name="hygro2-active" class="check-hygro" id="check-hygro2" checked>
+        <label for="hygro"><span class="form-name2"></span> Presence de capteur d'hygrométrie</label></p>
+        <p><input type="checkbox" value="" name="hygro3-active" class="check-hygro" id="check-hygro3" checked>
+        <label for="hygro"><span class="form-name3"></span> Presence de capteur d'hygrométrie</label></p>
+        </br>
+        <p class="linked-hygro1">hygrometrie de <span class="form-name1"></span>: <span class="hygro-plante1"></span></p>
+        <p class="linked-hygro2">hygrometrie de <span class="form-name2"></span>: <span class="hygro-plante2"></span></p>
+        <p class="linked-hygro3">hygrometrie de <span class="form-name3"></span>: <span class="hygro-plante3"></span></p>
+      </div>
+      <h3>Dates de croissance et floraison</h3>
+      <div class="subpage">
+        <form id="dates" action="" method="post">
+        <div class="form-name1"></div>
+        <div class="plant1-cro-input">
+          <label for="plante1-cro">Début de croissance: </label>
+          <input type="date" name="plante1-cro"></input>
+        </div>
+        <div class="plant1-flo-input">
+          <label for="plante1-flo">Début de floraison: </label>
+          <input type="date" name="plante1-flo"></input>
+        </div>
+        <div class="form-name2"></div>
+        <div class="plant2-cro-input">
+          <label for="plante2-cro">Début de croissance: </label>
+          <input type="date" name="plante2-cro"></input>
+        </div>
+        <div class="plant2-flo-input">
+          <label for="plante2-flo">Début de floraison: </label>
+          <input type="date" name="plante2-flo"></input>
+        </div>
+        <div class="form-name3"></div>
+        <div class="plant3-cro-input">
+          <label for="plante3-cro">Début de croissance: </label>
+          <input type="date" name="plante3-cro"></input>
+        </div>
+        <div class="plant3-flo-input">
+          <label for="plante3-flo">Début de floraison: </label>
+          <input type="date" name="plante3-flo"></input>
+        </div>
+        <button type="button" id="reset">reset</button>
+        <input type="submit" name="plantes-submit" value="valider"></input>
+      </form>
+      </div>
+    </div>
+  </div>
+
+  </body>
+<html/>
+<script type='text/javascript' src='https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js'></script>
+<script type='text/javascript'>
+$(document).ready(function(){
+
+$('html').css('background-image', 'url(background.png)');
+
+  monthNames = ['Janvier','Fevrier','Mars','Avril','Mai','Juin',
+  'Juillet','Aout','Septembre','Octobre','Novembre','Decembre'];
+
+  function getFormatDate(toFormat) {
+    var formattedDate = new Date(toFormat);
+    var d = formattedDate.getDate();
+    var m =  monthNames[formattedDate.getMonth()];
+    var y = formattedDate.getFullYear();
+
+  return (d + " " + m + " " + y);
+  }
+
+  function getFlo(croissance, floraison) {
+    var today = new Date();
+    var cro;
+    var flo;
+
+    if (croissance === "") {
+      cro = 0;
+    } else {
+      cro = new Date(croissance);
+    }
+    if (floraison === "") {
+      flo = 0;
+    } else {
+      flo = new Date(floraison);
+    }
+    if (flo !== 0)
+      r = (today - flo);
+    else {
+      r = 0;
+    }
+    return (Math.floor(r / (24*60*60*1000)) + " jours");
+  }
+
+  function getCro(croissance, floraison) {
+    var today = new Date();
+    var cro;
+    var flo;
+
+    if (croissance === "") {
+      cro = 0;
+    } else {
+      cro = new Date(croissance);
+    }
+    if (floraison === "") {
+      flo = 0;
+    } else {
+      flo = new Date(floraison);
+    }
+
+    if (flo === 0)
+      r = (today - cro);
+    else {
+      r = flo - cro
+    }
+    return (Math.floor(r / (24*60*60*1000)) + " jours");
+  }
+var t = new Date();
+//max value of inputs to today
+$('input[type="date"]').attr('max', t.getFullYear() + "-" + (t.getMonth() + 1 < 10 ? "0" : "") + (t.getMonth() + 1) + "-" + (t.getDate() + 1 < 10 ? "0" : "") + t.getDate());
+//slide configuration
+$('h3').click(function() {
+  $(this).next('.subpage').slideToggle('slow', function() {
+
+  });
+});
+
+$.ajax({
+       type: "GET",
+       url: "/getconfig",
+       dataType: "json",
+       success: function(data)
+       {
+         $('#hum-input').val(data.hum);
+         $('#hum-input').attr('value', data.hum);
+         $('#hygro-input').val(data.hygro);
+         $('#hygro-input').attr('value', data.hygro);
+         $("#hum-input").knob({
+           'change' : function (v) {
+             var value = Math.round(v,0);
+           $.ajax({url: "/sethumidity?value="+value, success: function(result){
+             $('#modif-popup-hum').fadeIn().delay(2000).fadeOut();
+         }});
+         }
+         });
+         $("#hygro-input").knob({
+           'change' : function (v) {
+             var value = Math.round(v,0);
+           $.ajax({url: "/sethumidity?value="+value, success: function(result){
+             $('#modif-popup-hum').fadeIn().delay(2000).fadeOut();
+         }});
+         }
+         });
+       }
+     });
+
+// set humidity
+  $("#hum-input").change(function(e) {
+    var value = $(this).val().match(/\d+/);
+    $.ajax({url: "/sethumidity?value="+value, success: function(result){
+      $('#modif-popup-hum').fadeIn().delay(2000).fadeOut();
+  }});
+  });
+
+//set hygro
+
+$("#hygro-input").change(function(e) {
+  var value = $(this).val().match(/\d+/);
+  $.ajax({url: "/sethumidity?value="+value, success: function(result){
+    $('#modif-popup-hum').fadeIn().delay(2000).fadeOut();
+}});
+});
+
+$('#dates input').change(function() {
+  console.log("go!");
+  for (var i = 0; i < 3; i++) {
+    if ($('.plant' + (i + 1) + '-cro-input input').val() === "") {
+     $('.plant' + (i + 1) + '-flo-input').fadeOut();
+     } else {
+     $('.plant' + (i + 1) + '-flo-input').fadeIn();
+   }
+ }
+});
+
+//setting up the page at its loading thanks to the JSON file
+
+$.ajax({
+       type: "GET",
+       url: "/getconfig",
+       dataType: "json",
+       success: function(data)
+       {
+         console.log(data);
+         $('.form-name1').text(data.plants[0].name + ":");
+         $('.form-name2').text(data.plants[1].name + ":");
+         $('.form-name3').text(data.plants[2].name + ":");
+         $('#date-cro1').text(getFormatDate(data.plants[0].cro));
+         $('#date-flo1').text(getFormatDate(data.plants[0].flo));
+         $('#date-cro2').text(getFormatDate(data.plants[1].cro));
+         $('#date-flo2').text(getFormatDate(data.plants[1].flo));
+         $('#date-cro3').text(getFormatDate(data.plants[2].cro));
+         $('#date-flo3').text(getFormatDate(data.plants[2].flo));
+
+         for (var i = 0; i < 3; i++) {
+           if (data.plants[i].cro === "") {
+             console.log('.plant' + (i + 1) + '-flo-input');
+            $('.plant' + (i + 1) + '-flo-input').fadeOut();
+            } else {
+            $('.plant' + (i + 1) + '-flo-input').fadeIn();
+          }
+        }
+
+         for (var i = 0; i < 3; i++) {
+           if (data.plants[i].cro === "") {
+             $('#div-cro' + (i + 1)).fadeOut();
+           }
+           if (data.plants[i].flo === "") {
+             $('#div-flo' + (i + 1)).fadeOut();
+           }
+         }
+
+         for (var i = 1; i < 4; i++) {
+           $('.cro' + i).text(getCro(data.plants[i - 1].cro, data.plants[i - 1].flo));
+           $('.flo' + i).text(getFlo(data.plants[i - 1].cro, data.plants[i - 1].flo));
+         }
+         if (data.humactive === 1) {
+           $('#hum-active').attr('checked', true);
+           $('#hum-input').parent().show();
+         } else {
+           $('#hum-active').attr('checked', false);
+           $('#hum-input').parent().hide();
+         }
+         for (var i = 0; i < 3; i++) {
+           if (data.plants[i].hygroactive === 0) {
+             $('.linked-hygro' + (i + 1)).hide();
+             $('#check-hygro' + (i + 1)).attr('checked', false);
+           } else {
+             $('.linked-hygro' + (i + 1)).show();
+             $('#check-hygro' + (i + 1)).attr('checked', true);
+           }
+           if (!$('.check-hygro').eq(0).is(':checked') && !$('.check-hygro').eq(1).is(':checked') && !$('.check-hygro').eq(2).is(':checked')) {
+             $('#hygro-input').parent().fadeOut();
+           } else {
+             $('#hygro-input').parent().fadeIn();
+           }
+         }
+       }
+     });
+
+setInterval(function(){
+  var url = "/getinfo";
+
+    $.ajax({
+           type: "GET",
+           url: url,
+           dataType: "json",
+           success: function(data)
+           {
+             $('#temp').text(data.t + " °C");
+             $('#hum').text(data.h + " %");
+             $('.hygro-plante1').text(data.hy1 + " %");
+             $('.hygro-plante2').text(data.hy2 + " %");
+             $('.hygro-plante2').text(data.hy2 + " %");
+              if (data.t < 18)
+                $('#temp').css('color', '#4d9fdd');
+              else if (data.t < 20)
+                $('#temp').css('color', '#58c3c0');
+              else if (data.t < 27)
+                $('#temp').css('color', '#99cc33');
+              else if (data.t < 31)
+                $('#temp').css('color', '#ff8d3f');
+              else
+                $('#temp').css('color', '#d60707');
+             if (data.w == 1)
+                ('#water-empty').fadeIn();
+             else {
+               ('#water-empty').fadeOut()
+             }
+             console.log(data);
+           }
+         });
+}, 5000);
+
+//set names modifying JSON file
+
+  $("#names").submit(function(e) {
+
+      var url = "/setnames?plant1=" + $(':input').eq(0).val() + "&plant2=" + $(':input').eq(1).val() + "&plant3=" + $(':input').eq(2).val();
+
+      $.ajax({
+             type: "GET",
+             url: url,
+             dataType: "json",
+             success: function(data)
+             {
+               $('.form-name1').text(data.plants[0].name + ":");
+               $('.form-name2').text(data.plants[1].name + ":");
+               $('.form-name3').text(data.plants[2].name + ":");
+               $('#modif-popup-names').fadeIn().delay(2000).fadeOut();
+             }
+           });
+      e.preventDefault();
+  });
+
+  $("#dates").submit(function(e) {
+
+      var url = "/setdates?plant1cro=" + $('input[type="date"]').eq(0).val() + "&plant1flo=" + $('input[type="date"]').eq(1).val() + "&plant2cro=" + $('input[type="date"]').eq(2).val() + "&plant2flo=" + $('input[type="date"]').eq(3).val() + "&plant3cro=" + $('input[type="date"]').eq(4).val() + "&plant3flo=" + $('input[type="date"]').eq(5).val();
+      console.log(url);
+
+      $.ajax({
+             type: "GET",
+             url: url,
+             dataType: "json",
+             success: function(data)
+             {
+               console.log(data);
+               $('#date-cro1').text(getFormatDate(data.plants[0].cro));
+               $('#date-flo1').text(getFormatDate(data.plants[0].flo));
+               $('#date-cro2').text(getFormatDate(data.plants[1].cro));
+               $('#date-flo2').text(getFormatDate(data.plants[1].flo));
+               $('#date-cro3').text(getFormatDate(data.plants[2].cro));
+               $('#date-flo3').text(getFormatDate(data.plants[2].flo));
+               for (var i = 0; i < 3; i++) {
+                 if (data.plants[i].cro === "") {
+                   $('#div-cro' + (i + 1)).fadeOut();
+                 } else {
+                   $('#div-cro' + (i + 1)).fadeIn();
+                 }
+                 if (data.plants[i].flo === "") {
+                   $('#div-flo' + (i + 1)).fadeOut();
+                 } else {
+                   $('#div-flo' + (i + 1)).fadeIn();
+                 }
+               }
+               //to test
+               for (var i = 1; i < 4; i++) {
+                 $('.cro' + i).text(getCro(data.plants[i - 1].cro, data.plants[i - 1].flo));
+                 $('.flo' + i).text(getFlo(data.plants[i - 1].cro, data.plants[i - 1].flo));
+               }
+               //end to test
+               $('#modif-popup-dates').fadeIn().delay(2000).fadeOut();
+             }
+           });
+      e.preventDefault();
+  });
+
+$('.form-name1').text('caca');
+
+
+
+  $('.check-hygro').change(function() {
+    var checked = $(this).is(':checked') ? "1" : "0";
+    index = $(this).parent().index() - 1;
+    var url = "/activatehygro?index=" + index + "&checked=" + checked;
+    $.ajax({
+           type: "GET",
+           url: url,
+           dataType: "json",
+           success: function(data)
+           {
+             $('.hygro-popup-name').text(data.plants[index].name);
+             if (checked === "1") {
+               $('#modif-popup-hygro-enable').fadeIn().delay(2000).fadeOut();
+               $('.linked-hygro' + (index + 1)).fadeIn();
+             } else {
+               $('#modif-popup-hygro-disable').fadeIn().delay(2000).fadeOut();
+               $('.linked-hygro' + (index + 1)).fadeOut();
+             }
+             if (!$('.check-hygro').eq(0).is(':checked') && !$('.check-hygro').eq(1).is(':checked') && !$('.check-hygro').eq(2).is(':checked')) {
+               $('#hygro-input').parent().fadeOut();
+             } else {
+               $('#hygro-input').parent().fadeIn();
+             }
+           }
+         });
+  });
+  //display or hide hum input
+
+  $('#hum-active').change(function() {
+    if ($(this).is(':checked')) {
+      $('#hum-input').parent().fadeIn('fast', function() {
+        var url = "/activatehumidity?active=1";
+        $.ajax({
+               type: "GET",
+               url: url,
+               dataType: "json",
+               success: function(data)
+               {
+                 $('#modif-popup-hum-enable').fadeIn().delay(2000).fadeOut();
+               }
+             });
+      });
+    } else {
+       $('#hum-input').parent().hide('fast', function() {
+         var url = "/activatehumidity?active=0";
+         $.ajax({
+                type: "GET",
+                url: url,
+                dataType: "json",
+                success: function(data)
+                {
+                  $('#modif-popup-hum-disable').fadeIn().delay(2000).fadeOut();
+                }
+              });
+       });
+    }
+  });
+
+$('#reset').click(function() {
+  var url = "/setdates?plant1cro=&plant1flo=&plant2cro=&plant2flo=&plant3cro=&plant3flo=";
+  console.log(url);
+
+  $.ajax({
+         type: "GET",
+         url: url,
+         dataType: "json",
+         success: function(data)
+         {
+           for (var i = 0; i < 3; i++) {
+             $('.plant' + (i + 1) + '-cro-input input').val("");
+             $('.plant' + (i + 1) + '-flo-input').fadeOut();
+          }
+           for (var i = 0; i < 3; i++) {
+              $('#div-cro' + (i + 1)).fadeOut();
+              $('#div-flo' + (i + 1)).fadeOut();
+              $('#date-flo' + (i + 1)).fadeOut();
+              $('#div-cro' + (i + 1)).text("");
+              $('#div-flo' + (i + 1)).text("");
+           }
+           $('#modif-popup-dates').fadeIn().delay(2000).fadeOut();
+         }
+       });
+});
+
+//make appear and desappear div by clicking on the menu
+    $('menu li').click(function(){
+        clicked = $(this).index();
+        (clicked === 1) ? noclicked = 0 : noclicked = 1;
+        $(this).css('background-color', '#aaaaaa');
+        $('menu li').eq(noclicked).css('background-color', '#dddddd');
+        $('.page').eq(noclicked).fadeOut('fast', function(){
+        $('.page').eq(clicked).fadeIn('fast', function(){});
+        });
+    });
+});
+</script>
+<script src="knob.js"></script>
+<script>
+    $('.dial').trigger(
+        'configure',
+        {
+          "min":0,
+          "max":100,
+          "width":150,
+    	    "fgColor":"#ddd",
+    	    "skin":"tron",
+    	    "thickness":0.2,
+    	    "displayPrevious":true,
+          "cursor":true
+        }
+    );
+</script>
