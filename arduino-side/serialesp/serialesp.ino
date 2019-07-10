@@ -14,7 +14,8 @@
 
 #define DHTTYPE DHT22
 
-#define MAX_HYGRO 800
+#define MAX_HYGRO 560
+#define MIN_HYGRO 100
 
 DHT dht(DHTPIN, DHTTYPE);
 
@@ -37,6 +38,7 @@ void setup() {
   pinMode(WATERPUMP2, OUTPUT);
   pinMode(WATERPUMP3, OUTPUT);
   pinMode(HALOPIN, INPUT);
+  pinMode(13, OUTPUT);
 
   waterEmpty = 0;
 
@@ -50,11 +52,11 @@ void loop() {
   //waterEmpty = digitalRead(HALOPIN);
   
   if (hygroActivated[0])
-    hygro[0] = map(1023 - analogRead(HYGROPIN1), 0, MAX_HYGRO, 0, 100);
+    hygro[0] = map(MAX_HYGRO - analogRead(HYGROPIN1), MIN_HYGRO, MAX_HYGRO, 0, 100);
   if (hygroActivated[1])
-    hygro[1] = map(1023 - analogRead(HYGROPIN2), 0, MAX_HYGRO, 0, 100);
+    hygro[1] = map(MAX_HYGRO - analogRead(HYGROPIN2), MIN_HYGRO, MAX_HYGRO, 0, 100);
   if (hygroActivated[2])
-    hygro[2] = map(1023 - analogRead(HYGROPIN3), 0, MAX_HYGRO, 0, 100);
+    hygro[2] = map(MAX_HYGRO - analogRead(HYGROPIN3), MIN_HYGRO, MAX_HYGRO, 0, 100);
   if (hygroActivated[0] && hygro[0] < hygroRequired && !waterEmpty)
     digitalWrite(WATERPUMP1, HIGH);
   if (hygroActivated[1] && hygro[1] < hygroRequired && !waterEmpty)
@@ -105,14 +107,16 @@ void checkInfoFromESP()
    StringReady = true;
   }
   if (StringReady){
-    Serial.println(jsonString);
+    //Serial.println(jsonString);
     StaticJsonBuffer<200> jsonBuffer;
     JsonObject& root = jsonBuffer.parseObject(jsonString);
     if (!root.success()) {
-        Serial.println("Failed to parse config file");
+        //Serial.println("Failed to parse config file");
+        digitalWrite(13, LOW);
         return ;
     }
-    Serial.println("PARSED");
+    digitalWrite(13, HIGH);
+    //Serial.println("PARSED");
     humidityRequired = root["humr"];
     humidityActivated = root["huma"];
     hygroRequired = root["hyr"];
