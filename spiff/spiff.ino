@@ -18,8 +18,8 @@ float hygro[3];
 
 String infoAtm;
 
-char ssid[] = "wifi_sophie";
-char pass[] = "oceane999";
+char ssid[] = "ALMOXA";
+char pass[] = "29CFA9A2C1";
 
 int status = WL_IDLE_STATUS;
 
@@ -102,7 +102,7 @@ void reloadConfig() {
 
 void handleSetNames(){
     for (int i = 0; i < 3; i++) {
-        server.arg(i).trim();
+        server.arg(i);
         if (server.arg(i).length() != 0) {
             names[i] = server.arg(i);
         }
@@ -112,7 +112,7 @@ void handleSetNames(){
 
 void handleSetDates(){
     for (int i = 0; i < 6; i++) {
-        server.arg(i).trim();
+        server.arg(i);
         if (server.arg(i).length() != 0) {
             dates[i] = server.arg(i);
         }
