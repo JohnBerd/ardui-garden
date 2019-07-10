@@ -47,7 +47,7 @@ void setup() {
 void loop() {
   humidity = dht.readHumidity();
   temperature = dht.readTemperature();
-  waterEmpty = digitalRead(HALOPIN);
+  //waterEmpty = digitalRead(HALOPIN);
   
   if (hygroActivated[0])
     hygro[0] = map(1023 - analogRead(HYGROPIN1), 0, MAX_HYGRO, 0, 100);
@@ -121,4 +121,3 @@ void checkInfoFromESP()
     hygroActivated[2] = root["hy3"];
   }
 }
-
