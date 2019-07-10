@@ -61,13 +61,13 @@ void loop() {
     digitalWrite(WATERPUMP1, HIGH);
   if (hygroActivated[1] && hygro[1] < hygroRequired && !waterEmpty)
     digitalWrite(WATERPUMP2, HIGH);
-  if (hygroActivated[1] && hygro[1] < hygroRequired && !waterEmpty)
+  if (hygroActivated[2] && hygro[2] < hygroRequired && !waterEmpty)
     digitalWrite(WATERPUMP2, HIGH);
-  if (hygroActivated[0] && hygro[0] > 100)
+  if (hygroActivated[0] && hygro[0] > hygroRequired)
     digitalWrite(WATERPUMP1, LOW);
-  if (hygroActivated[0] && hygro[1] > 100)
+  if (hygroActivated[1] && hygro[1] > hygroRequired)
     digitalWrite(WATERPUMP2, LOW);
-  if (hygroActivated[0] && hygro[2] > 100)
+  if (hygroActivated[2] && hygro[2] > hygroRequired)
     digitalWrite(WATERPUMP3, LOW);
 
   if (humidityActivated && humidity < humidityRequired && !waterEmpty)
@@ -100,8 +100,11 @@ void checkInfoFromESP()
   bool StringReady;
   String jsonString ="";
 
-  if (!Serial.available())
-    return ;
+  digitalWrite(13, HIGH);
+  delay(100);
+  digitalWrite(13, LOW);
+  delay(100);
+  digitalWrite(13, HIGH);
   while (Serial.available()){
    jsonString =Serial.readString();
    StringReady = true;

@@ -126,7 +126,7 @@ void handleActivateHygro() {
 }
 
 void handleSetHygro() {
-    humidityRequired = server.arg(0).toInt();
+    hygroRequired = server.arg(0).toInt();
     reloadConfig();
 }
 
